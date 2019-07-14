@@ -3,11 +3,6 @@ module Enumerable
         for item in self do
             yield(item)
         end
-        # while i < arr.length
-        #     yield(arr)
-        #     item = arr[i]
-        #     i+=1
-        # end
     end
 
     def my_each_with_index
@@ -28,11 +23,6 @@ module Enumerable
 
     def my_all?()
         check=false
-        # for item in self do
-        #     check=yield(item)
-        #     break if not check 
-        #     # yield(item) if true && not nil
-        # end
         self.my_each do |item|
             check = yield(item)
             break if not check
@@ -49,17 +39,32 @@ module Enumerable
         check
     end
 
-    def my_none?
-        check = false
-        self.my_each do |item|
-            check = !yield(item)
-            break if not check
-        end 
-        check
+    def my_none?()
+      check = false
+      self.my_each do |item|
+        check = !yield(item)
+        break if not check  
+      end 
+      check
     end
 
-    def my_count
-        self.length
+    def my_count(arg=nil)
+        arr=[]
+        if arg != nil
+            self.my_each do |i|
+                arr << i if arg == i
+            end
+        end
+        if block_given? == false
+            self.my_each do |i|
+                arr << i
+            end
+        end
+        self.my_each do |i|
+            arr << i if yield(i)
+        end
+
+        arr.length
     end
 
     def my_map(&proc)
@@ -77,24 +82,12 @@ module Enumerable
 
     def my_inject(*arg)
         ac=self[0]
-        # self.my_each do |item|
-        #     ac = yield(ac,item)
-        # end
-        # ac
         for item in self[1..self.length] do
             ac=yield(ac,item)
         end
         ac
     end
 end
-
-# def multiply_els(arr)
-#    arr.my_inject do |item,e|
-#      item * e
-#    end
-# end
-
-# p multiply_els([2,4,5])
 
 ####### CHECK FOR my_select
 # arr=[1,2,3,4,4]
@@ -121,14 +114,31 @@ end
 # p all_ch(str)
 
 ###### CHECK FOR my_none?
-def all_ch(arr)
-    arr.none? do |item|
-        item.length >=2
-    end
-end
-str=["wordd", "any", "honey", "med",""]
-str2=[]
-p all_ch(str)
-p all_ch(str2)
+# def all_ch(arr)
+#     arr.my_none? do |item|
+#         item.size == 2
+#     end
+# end
+# str=["wordd", "any", "honey", "med",""]
+# str2=["12","fall", "water"]
+# p all_ch(str)
+# p all_ch(str2)
 
+######### CHECK FOR my_count
+# nums = [1,2,3,4,5,6,7,8,9,10]
+# p nums.my_count(&:even?)
+
+######### CHECK FOR my_map
+# nums = [1,2,3,4,5,6,7,8,9,10]
+# p nums.map(&:even?)
+# p nums.my_map{ |i| i * 2 }
+
+######### CHECK FOR my_inject
+# def multiply_els(arr)
+#     arr.my_inject do |item,e|
+#       item * e
+#     end
+#  end
+ 
+#  p multiply_els([2,4,5])
 
