@@ -21,7 +21,7 @@ module Enumerable
     arr
   end
 
-  def my_all?()
+  def my_all?
     check=false
       self.my_each do |item|
         check = yield(item)
@@ -39,7 +39,7 @@ module Enumerable
       check
   end
 
-  def my_none?()
+  def my_none?
     check = false
     self.my_each do |item|
       check = !yield(item)
@@ -53,17 +53,14 @@ module Enumerable
     if arg != nil
       self.my_each do |i|
         arr << i if arg == i
-        end
-    end
-    if block_given? == false
+      end
+    elsif block_given? == false
+      self.length
+    else
       self.my_each do |i|
-      arr << i
+        arr << i if yield(i)
+      end
     end
-  end
-    self.my_each do |i|
-      arr << i if yield(i)
-    end
-
     arr.length
   end
 
